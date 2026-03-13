@@ -14,7 +14,7 @@ body {
 /* ================= HERO / HEADER ================= */
 .hero {
   height: 100vh;
-  background: url("images/Hero-background.jpg") center/cover no-repeat;
+  background: url("/images/Hero-background.jpg") center/cover no-repeat;
   color: #fff;
   display: flex;
   flex-direction: column;
