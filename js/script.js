@@ -523,21 +523,28 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartBadge();
   updateCurrentUserDisplay();
 
-  // Dynamic avatar link
+  // Dynamic avatar link: user.html nëse je loguar, auth modal nëse jo
   const authTrigger = document.getElementById("auth-trigger");
   if (authTrigger) {
     let currentUser = null;
     try {
       currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
     } catch (_e) {}
+    // Hiq eventet ekzistuese për të shmangur dyfishim
+    const newAuthTrigger = authTrigger.cloneNode(true);
+    authTrigger.parentNode.replaceChild(newAuthTrigger, authTrigger);
     if (currentUser && currentUser.email) {
-      authTrigger.setAttribute("href", "user.html");
+      newAuthTrigger.setAttribute("href", "user.html");
+      // Mos shto event click për modal
     } else {
-      authTrigger.setAttribute("href", "#");
-      authTrigger.addEventListener("click", function(e) {
+      newAuthTrigger.setAttribute("href", "#");
+      newAuthTrigger.addEventListener("click", function(e) {
         e.preventDefault();
         const modal = document.getElementById("auth-modal");
-        if (modal) modal.hidden = false;
+        if (modal) {
+          modal.hidden = false;
+          modal.style.display = "block";
+        }
       });
     }
   }
@@ -568,6 +575,16 @@ document.addEventListener("DOMContentLoaded", () => {
         closeAuthModal();
       }
     });
+
+    // Skip & Continue as Guest
+    const skipGuestBtn = document.getElementById("modal-skip-guest");
+    if (skipGuestBtn) {
+      skipGuestBtn.addEventListener("click", () => {
+        localStorage.removeItem("currentUser");
+        closeAuthModal();
+        updateCurrentUserDisplay && updateCurrentUserDisplay();
+      });
+    }
   }
 
   // Only show login form by default, hide register form
