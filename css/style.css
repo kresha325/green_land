@@ -1,3 +1,23 @@
+/* Go to Top Button */
+#go-to-top {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 48px;
+  height: 48px;
+  background: #2ecc71;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 1200;
+  transition: background 0.2s;
+}
+#go-to-top:hover {
+  background: #27ae60;
+}
 /* AUTH MODAL STYLES */
 /* Modal container */
 /* Modal container */

@@ -511,6 +511,20 @@ window.addEventListener("storage", (event) => {
 
 // Inicijalizim
 document.addEventListener("DOMContentLoaded", () => {
+    // Go to Top Button logic
+    const goToTopBtn = document.getElementById("go-to-top");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 200) {
+        goToTopBtn.style.display = "block";
+      } else {
+        goToTopBtn.style.display = "none";
+      }
+    });
+    if (goToTopBtn) {
+      goToTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
   if (productsContainer && categoryContainer && allBtn) {
     loadCategories();
     loadAllProducts();
