@@ -91,12 +91,20 @@ function setInputError(input, message) {
 	const errorEl = ensureErrorElement(input);
 	input.classList.add("input-invalid");
 	errorEl.textContent = message;
+	const label = input.previousElementSibling;
+	if (label && label.tagName === "LABEL") {
+		label.classList.add("label-invalid");
+	}
 }
 
 function clearInputError(input) {
 	const errorEl = ensureErrorElement(input);
 	input.classList.remove("input-invalid");
 	errorEl.textContent = "";
+	const label = input.previousElementSibling;
+	if (label && label.tagName === "LABEL") {
+		label.classList.remove("label-invalid");
+	}
 }
 
 function validatePaymentForm() {
