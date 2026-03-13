@@ -1,3 +1,11 @@
+const skipGuestBtn = document.getElementById("skip-guest");
+
+if (skipGuestBtn) {
+  skipGuestBtn.addEventListener("click", () => {
+    localStorage.removeItem("currentUser");
+    window.location.href = "index.html";
+  });
+}
 const loginTab = document.getElementById("show-login");
 const registerTab = document.getElementById("show-register");
 const loginForm = document.getElementById("login-form");

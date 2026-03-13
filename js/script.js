@@ -522,6 +522,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateCartBadge();
   updateCurrentUserDisplay();
+
+  // Dynamic avatar link
+  const authTrigger = document.getElementById("auth-trigger");
+  if (authTrigger) {
+    let currentUser = null;
+    try {
+      currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
+    } catch (_e) {}
+    if (currentUser && currentUser.email) {
+      authTrigger.setAttribute("href", "user.html");
+    } else {
+      authTrigger.setAttribute("href", "auth.html");
+    }
+  }
 });
 
 window.GreenLandSearchApi = {
