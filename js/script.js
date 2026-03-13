@@ -12,7 +12,7 @@ let visibleCount = 0;
 let isFetchingProducts = false;
 
 // Shitje e cart-it
-let cart = [];
+let mainCart = [];
 
 function readCartFromStorage() {
   try {
