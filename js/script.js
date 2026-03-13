@@ -533,8 +533,123 @@ document.addEventListener("DOMContentLoaded", () => {
     if (currentUser && currentUser.email) {
       authTrigger.setAttribute("href", "user.html");
     } else {
-      authTrigger.setAttribute("href", "auth.html");
+      authTrigger.setAttribute("href", "#");
+      authTrigger.addEventListener("click", function(e) {
+        e.preventDefault();
+        const modal = document.getElementById("auth-modal");
+        if (modal) modal.hidden = false;
+      });
     }
+  }
+
+  // Siguro që modal-i auth të jetë gjithmonë i fshehur kur faqja hapet/rifreskohet dhe përdor vetëm një referencë
+  const modal = document.getElementById("auth-modal");
+  if (modal) {
+    modal.hidden = true;
+    modal.style.display = "none";
+
+    // Modal logic
+    function closeAuthModal() {
+      modal.hidden = true;
+      modal.style.display = "none";
+      console.log("[MODAL] closeAuthModal u thirr (forco display none)");
+    }
+    const closeBtn = document.getElementById("auth-modal-close");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", closeAuthModal);
+    }
+    // Mbyll modalin edhe me klikim jashtë (event delegation)
+    modal.addEventListener("click", (e) => {
+      // Klikim jashtë content ose në backdrop
+      if (
+        e.target === modal ||
+        (e.target.classList && e.target.classList.contains("auth-modal-backdrop"))
+      ) {
+        closeAuthModal();
+      }
+    });
+  }
+
+  // Only show login form by default, hide register form
+  const loginForm = document.getElementById("modal-login-form");
+  const registerForm = document.getElementById("modal-register-form");
+  if (loginForm && registerForm) {
+    loginForm.hidden = false;
+    registerForm.hidden = true;
+  }
+
+  // Auth logic (localStorage, no reload)
+  const modalAuthMsg = document.getElementById("modal-auth-message");
+  function showModalMsg(msg) {
+    if (modalAuthMsg) {
+      modalAuthMsg.textContent = msg;
+      modalAuthMsg.hidden = false;
+    }
+  }
+  function clearModalMsg() {
+    if (modalAuthMsg) {
+      modalAuthMsg.textContent = "";
+      modalAuthMsg.hidden = true;
+    }
+  }
+  if (loginForm) {
+    loginForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      clearModalMsg();
+      const email = document.getElementById("modal-login-email").value.trim().toLowerCase();
+      const password = document.getElementById("modal-login-password").value;
+      const users = JSON.parse(localStorage.getItem("users") || "[]");
+      const user = users.find(u => u.email === email && u.password === password);
+      if (!user) {
+        showModalMsg("Email ose password gabim!");
+        return;
+      }
+      localStorage.setItem("currentUser", JSON.stringify(user));
+      closeAuthModal();
+      // Forco mbylljen e modalit edhe në rast edge-case
+      if (modal) {
+        modal.hidden = true;
+        modal.style.display = "none";
+      }
+      if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/" || window.location.pathname === "") {
+        setTimeout(() => window.location.reload(), 200);
+      }
+    });
+  }
+  if (registerForm) {
+    registerForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      clearModalMsg();
+      const name = document.getElementById("modal-register-name").value.trim();
+      const email = document.getElementById("modal-register-email").value.trim().toLowerCase();
+      const password = document.getElementById("modal-register-password").value;
+      if (name.length < 2) {
+        showModalMsg("Emri duhet te kete te pakten 2 karaktere.");
+        return;
+      }
+      if (password.length < 6) {
+        showModalMsg("Password duhet te kete te pakten 6 karaktere.");
+        return;
+      }
+      let users = JSON.parse(localStorage.getItem("users") || "[]");
+      if (users.some(u => u.email === email)) {
+        showModalMsg("Ky email ekziston!");
+        return;
+      }
+      const user = { name, email, password };
+      users.push(user);
+      localStorage.setItem("users", JSON.stringify(users));
+      localStorage.setItem("currentUser", JSON.stringify(user));
+      closeAuthModal();
+      // Forco mbylljen e modalit edhe në rast edge-case
+      if (modal) {
+        modal.hidden = true;
+        modal.style.display = "none";
+      }
+      if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/" || window.location.pathname === "") {
+        setTimeout(() => window.location.reload(), 200);
+      }
+    });
   }
 });
 

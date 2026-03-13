@@ -26,6 +26,66 @@
     <script src="./js/search.js" defer></script>
   </head>
   <body>
+    <!-- LOGIN/REGISTER MODAL -->
+    <div id="auth-modal" class="auth-modal" hidden>
+      <div class="auth-modal-backdrop"></div>
+      <div class="auth-modal-content">
+        <button
+          class="auth-modal-close"
+          id="auth-modal-close"
+          aria-label="Mbyll"
+        >
+          &times;
+        </button>
+        <form id="modal-login-form" class="auth-modal-form">
+          <label for="modal-login-email">Email</label>
+          <input
+            id="modal-login-email"
+            type="email"
+            required
+            placeholder="example@mail.com"
+            autocomplete="username"
+          />
+          <label for="modal-login-password">Password</label>
+          <input
+            id="modal-login-password"
+            type="password"
+            required
+            placeholder="********"
+            autocomplete="current-password"
+          />
+          <button type="submit" class="auth-modal-submit">Login</button>
+        </form>
+        <form id="modal-register-form" class="auth-modal-form" hidden>
+          <label for="modal-register-name">Emri</label>
+          <input
+            id="modal-register-name"
+            type="text"
+            required
+            placeholder="Emri i plote"
+            autocomplete="name"
+          />
+          <label for="modal-register-email">Email</label>
+          <input
+            id="modal-register-email"
+            type="email"
+            required
+            placeholder="example@mail.com"
+            autocomplete="username"
+          />
+          <label for="modal-register-password">Password</label>
+          <input
+            id="modal-register-password"
+            type="password"
+            required
+            placeholder="Min 6 karaktere"
+            autocomplete="new-password"
+          />
+          <button type="submit" class="auth-modal-submit">Sign Up</button>
+        </form>
+        <p id="modal-auth-message" class="auth-modal-message" hidden></p>
+      </div>
+    </div>
     <!-- ================= HEADER / HERO ================= -->
     <header class="hero">
       <div class="navbar">

@@ -140,4 +140,4 @@ Për çdo pyetje, kontakto instruktorin ose hap një issue në repo.
 
 ---
 
-**Deploy & suksese!** 🌱
+**Deploy link https://kresha325.github.io/green_land ** 🌱

@@ -120,6 +120,9 @@ if (registerForm) {
     showMessage("Regjistrimi u krye me sukses.", "success");
     registerForm.reset();
     renderCurrentUser();
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 600);
   });
 }
 
@@ -143,6 +146,9 @@ if (loginForm) {
     showMessage("Login u krye me sukses.", "success");
     loginForm.reset();
     renderCurrentUser();
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 600);
   });
 }
 
