@@ -14,6 +14,7 @@
   cursor: pointer;
   z-index: 1200;
   transition: background 0.2s;
+  display: none;
 }
 #go-to-top:hover {
   background: #27ae60;
