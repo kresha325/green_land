@@ -1,0 +1,530 @@
+const categoryContainer = document.getElementById("categories");
+const productsContainer = document.querySelector(".products");
+const allBtn = document.getElementById("all-products");
+const navUsername = document.getElementById("nav-username");
+const authTrigger = document.getElementById("auth-trigger");
+const PAGE_SIZE = 9;
+
+let sourceProducts = [];
+let visibleProducts = [];
+let activeSearchQuery = "";
+let visibleCount = 0;
+let isFetchingProducts = false;
+
+// Shitje e cart-it
+let cart = [];
+
+function readCartFromStorage() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem("cart") || "[]");
+    if (!Array.isArray(parsed)) {
+      localStorage.setItem("cart", "[]");
+      return [];
+    }
+    return parsed;
+  } catch (_error) {
+    localStorage.setItem("cart", "[]");
+    return [];
+  }
+}
+
+function writeCartToStorage(items) {
+  try {
+    localStorage.setItem("cart", JSON.stringify(items));
+  } catch (_error) {
+    // Keep app usable even if storage write fails.
+  }
+}
+
+function getCurrentUserIdentifier() {
+  try {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
+    if (currentUser && currentUser.email) return currentUser.email;
+  } catch (_error) {
+    // Ignore and fallback to guest.
+  }
+
+  return "guest";
+}
+
+function getFavoritesStorageKey() {
+  return `favorites_${getCurrentUserIdentifier()}`;
+}
+
+const FAVORITES_STORAGE_KEY = getFavoritesStorageKey();
+
+function readFavorites() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (_error) {
+    localStorage.setItem(FAVORITES_STORAGE_KEY, "[]");
+    return [];
+  }
+}
+
+function writeFavorites(items) {
+  try {
+    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(items));
+  } catch (_error) {
+    // Keep app usable if storage is full.
+  }
+}
+
+function isFavoriteProduct(productId) {
+  return readFavorites().some((item) => String(item.id) === String(productId));
+}
+
+function normalizeProductFromCard(card, triggerEl) {
+  const title =
+    triggerEl?.getAttribute("data-title") ||
+    card.querySelector("h4")?.textContent?.trim() ||
+    "Product";
+  const description =
+    triggerEl?.getAttribute("data-description") ||
+    card.querySelector(".desc")?.textContent?.trim() ||
+    "";
+  const category = triggerEl?.getAttribute("data-category") || "";
+  const price =
+    triggerEl?.getAttribute("data-price") ||
+    card.querySelector(".price")?.textContent?.replace("$", "").trim() ||
+    "0";
+  const image =
+    triggerEl?.getAttribute("data-image") ||
+    card.querySelector("img")?.getAttribute("src") ||
+    "";
+  const id =
+    triggerEl?.getAttribute("data-id") ||
+    `${title.toLowerCase().replace(/\s+/g, "-")}-${price}`;
+
+  return {
+    id: String(id),
+    title,
+    description,
+    category,
+    price: Number(price) || 0,
+    image,
+  };
+}
+
+function updateWishlistUi(wishlistEl, isActive) {
+  if (!wishlistEl) return;
+
+  wishlistEl.classList.toggle("active", Boolean(isActive));
+}
+
+function toggleFavoriteProduct(product) {
+  const favorites = readFavorites();
+  const existingIndex = favorites.findIndex((item) => String(item.id) === String(product.id));
+
+  if (existingIndex >= 0) {
+    favorites.splice(existingIndex, 1);
+    writeFavorites(favorites);
+    return false;
+  }
+
+  favorites.push(product);
+  writeFavorites(favorites);
+  return true;
+}
+
+function bindWishlistButton(wishlistEl) {
+  if (!wishlistEl || wishlistEl.dataset.boundWishlist === "true") return;
+
+  wishlistEl.dataset.boundWishlist = "true";
+
+  const card = wishlistEl.closest(".product-card");
+  if (!card) return;
+
+  const addToCartBtn = card.querySelector(".add-to-cart");
+  const product = normalizeProductFromCard(card, addToCartBtn);
+  updateWishlistUi(wishlistEl, isFavoriteProduct(product.id));
+
+  wishlistEl.addEventListener("click", (event) => {
+    event.preventDefault();
+    const normalized = normalizeProductFromCard(card, addToCartBtn);
+    const active = toggleFavoriteProduct(normalized);
+    updateWishlistUi(wishlistEl, active);
+  });
+}
+
+function normalizeCartItems(items) {
+  const map = new Map();
+
+  items.forEach((item) => {
+    if (!item || typeof item !== "object") {
+      return;
+    }
+
+    const rawId = item.id || item.title;
+    if (!rawId) {
+      return;
+    }
+
+    const id = String(rawId);
+    const quantity = Number(item.quantity || 1);
+    const price = Number(item.price || 0);
+
+    if (!map.has(id)) {
+      map.set(id, {
+        ...item,
+        id,
+        price,
+        quantity: quantity > 0 ? quantity : 1,
+      });
+      return;
+    }
+
+    const existing = map.get(id);
+    existing.quantity += quantity > 0 ? quantity : 1;
+  });
+
+  return Array.from(map.values());
+}
+
+function bindAddToCartButton(button) {
+  if (!button || button.dataset.boundAddToCart === "true") return;
+
+  button.dataset.boundAddToCart = "true";
+  button.addEventListener("click", (event) => {
+    event.preventDefault();
+    addToCart(button);
+  });
+}
+
+function syncCartFromStorage() {
+  const parsed = readCartFromStorage();
+  cart = normalizeCartItems(parsed);
+  writeCartToStorage(cart);
+}
+
+// Ngarko të gjitha produktet
+async function loadAllProducts() {
+  if (!productsContainer) return;
+  if (isFetchingProducts) return;
+
+  try {
+    isFetchingProducts = true;
+    const response = await fetch("https://dummyjson.com/products?limit=100");
+
+    if (!response.ok) {
+      throw new Error("Nuk u moren produktet");
+    }
+
+    const data = await response.json();
+    initializeProductList(data.products || []);
+  } catch (error) {
+    console.error("Error loading all products:", error);
+    productsContainer.innerHTML = "<p>Nuk u ngarkuan produktet.</p>";
+  } finally {
+    isFetchingProducts = false;
+  }
+}
+
+// Ngarko kategoritë dinamikisht
+async function loadCategories() {
+  if (!categoryContainer) return;
+
+  try {
+    const response = await fetch("https://dummyjson.com/products/categories");
+
+    if (!response.ok) {
+      throw new Error("Nuk u ngarkuan kategorite");
+    }
+
+    const categories = await response.json();
+
+    // Fshi butonat statik
+    categoryContainer.innerHTML = "";
+
+    // Krijo butonat dinamikisht për çdo kategori
+    categories.forEach((category) => {
+      const button = document.createElement("button");
+      button.className = "category-button";
+      
+      // Kontrolloje nëse category është objekt apo string
+      const categoryName =
+        typeof category === "object" ? category.name : category;
+      const categorySlug =
+        typeof category === "object" ? category.slug : category;
+      
+      button.textContent = categoryName;
+      button.setAttribute("data-category", categorySlug);
+
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        setActiveButton(button);
+        loadProductsByCategory(categorySlug);
+      });
+      categoryContainer.appendChild(button);
+    });
+  } catch (error) {
+    console.error("Error loading categories:", error);
+  }
+}
+
+// Ngarko produktet sipas kategorisë
+async function loadProductsByCategory(category) {
+  if (!productsContainer) return;
+  if (isFetchingProducts) return;
+
+  try {
+    isFetchingProducts = true;
+    const url = `https://dummyjson.com/products/category/${category}`;
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("Nuk u ngarkuan produktet e kategorise");
+    }
+
+    const data = await response.json();
+
+    if (data.products && data.products.length > 0) {
+      initializeProductList(data.products);
+    } else {
+      productsContainer.innerHTML = "<p>Nuk ka produkte në këtë kategori</p>";
+    }
+  } catch (error) {
+    console.error("Error loading products by category:", error);
+    productsContainer.innerHTML =
+      "<p>Nuk u ngarkuan produktet për këtë kategori.</p>";
+  } finally {
+    isFetchingProducts = false;
+  }
+}
+
+// Inicjalizo listën aktive të produkteve dhe shfaq batch-in e parë
+function initializeProductList(products) {
+  sourceProducts = Array.isArray(products) ? products : [];
+  applySearchFilter(activeSearchQuery);
+}
+
+function applySearchFilter(query = "") {
+  if (!productsContainer) return;
+
+  activeSearchQuery = query.trim().toLowerCase();
+
+  visibleProducts = sourceProducts.filter((product) =>
+    product.title.toLowerCase().includes(activeSearchQuery)
+  );
+
+  visibleCount = 0;
+  productsContainer.innerHTML = "";
+
+  if (visibleProducts.length === 0) {
+    productsContainer.innerHTML = "<p>Nuk u gjet asnje produkt me kete emer.</p>";
+    return;
+  }
+
+  renderNextBatch();
+}
+
+// Renderizo batch-et nga 9 produkte sa herë bëhet scroll poshtë
+function renderNextBatch() {
+  if (!productsContainer) return;
+  if (visibleCount >= visibleProducts.length) return;
+
+  const nextProducts = visibleProducts.slice(visibleCount, visibleCount + PAGE_SIZE);
+  visibleCount += nextProducts.length;
+
+  nextProducts.forEach((product) => {
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.setAttribute("data-product-id", String(product.id));
+
+    const productImage = product.thumbnail || (product.images && product.images[0]) || "";
+
+    card.innerHTML = `
+      <img src="${productImage}" alt="${product.title}" />
+      <h4>${product.title}</h4>
+      <p class="desc">${product.description}</p>
+      <div class="price-cart">
+        <span class="price">$${product.price}</span>
+        <button class="add-to-cart" data-id="${product.id}" data-title="${product.title}" data-description="${product.description}" data-category="${product.category}" data-price="${product.price}" data-image="${productImage}">Add to cart</button>
+        <button class="wishlist" type="button" aria-label="Favorite" data-id="${product.id}" data-title="${product.title}" data-description="${product.description}" data-category="${product.category}" data-price="${product.price}" data-image="${productImage}"><i class="fas fa-heart"></i></button>
+      </div>
+    `;
+
+    const addToCartButton = card.querySelector(".add-to-cart");
+    if (addToCartButton) {
+      bindAddToCartButton(addToCartButton);
+    }
+
+    const wishlistButton = card.querySelector(".wishlist");
+    if (wishlistButton) {
+      bindWishlistButton(wishlistButton);
+    }
+
+    productsContainer.appendChild(card);
+  });
+}
+
+function handleInfiniteScroll() {
+  if (!productsContainer) return;
+
+  const reachedBottom =
+    window.innerHeight + window.scrollY >= document.body.offsetHeight - 120;
+
+  if (reachedBottom) {
+    renderNextBatch();
+  }
+}
+
+// Shto produktin në cart
+function addToCart(e) {
+  syncCartFromStorage();
+
+  const fallbackButton =
+    document.activeElement && document.activeElement.closest
+      ? document.activeElement.closest("button")
+      : null;
+  const buttonFromArg = e && e.tagName === "BUTTON" ? e : null;
+  const button = buttonFromArg || (e && e.currentTarget ? e.currentTarget : e && e.target ? e.target : fallbackButton);
+  if (!button || typeof button.getAttribute !== "function") return;
+
+  const productCard = button.closest(".product-card");
+  const titleFromCard = productCard
+    ? productCard.querySelector("h4")?.textContent?.trim()
+    : "";
+  const priceFromCard = productCard
+    ? productCard
+        .querySelector(".price")
+        ?.textContent?.replace("$", "")
+        .trim()
+    : "";
+  const imageFromCard = productCard
+    ? productCard.querySelector("img")?.getAttribute("src")
+    : "";
+
+  const productTitle = button.getAttribute("data-title") || titleFromCard;
+  const productPrice = button.getAttribute("data-price") || priceFromCard;
+  const productImage = button.getAttribute("data-image") || imageFromCard || "";
+  const productId =
+    button.getAttribute("data-id") ||
+    `${(productTitle || "product").toLowerCase().replace(/\s+/g, "-")}-${productPrice || "0"}`;
+
+  if (!productTitle || !productPrice) {
+    return;
+  }
+
+  const product = {
+    id: String(productId),
+    title: productTitle,
+    price: productPrice,
+    image: productImage,
+    quantity: 1
+  };
+
+  // Kontrollo nëse produkti ekziston në cart
+  const existingProduct = cart.find(item => String(item.id) === String(productId));
+  
+  if (existingProduct) {
+    existingProduct.quantity++;
+  } else {
+    cart.push(product);
+  }
+
+  // Ruaj në localStorage
+  writeCartToStorage(cart);
+  
+  // Update notification badge
+  updateCartBadge();
+  
+  alert(productTitle + " u shtua në cart!");
+}
+
+window.addToCart = addToCart;
+
+// Përditëso badge-in e cart-it
+function updateCartBadge() {
+  const badge = document.querySelector(".notification-badge");
+  if (badge) {
+    syncCartFromStorage();
+    // Shfaq numrin e produkteve unike në cart
+    badge.textContent = String(cart.length);
+  }
+}
+
+function updateCurrentUserDisplay() {
+  if (!navUsername) return;
+
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
+
+  if (currentUser && currentUser.name) {
+    navUsername.textContent = currentUser.name;
+    navUsername.hidden = false;
+    if (authTrigger) {
+      authTrigger.classList.add("logged-in");
+    }
+    return;
+  }
+
+  navUsername.hidden = true;
+  if (authTrigger) {
+    authTrigger.classList.remove("logged-in");
+  }
+}
+
+// Vendos butonin aktiv
+function setActiveButton(button) {
+  // Hiq "active" nga të gjithë butonat e kategorive
+  document.querySelectorAll(".category-button").forEach(btn => {
+    btn.classList.remove("active");
+  });
+  // Hiq "active" nga butoni ALL
+  allBtn.classList.remove("active");
+  
+  // Shto "active" vetëm te butoni i klikuar
+  button.classList.add("active");
+}
+
+// Buton ALL - ngarko të gjitha produktet
+if (allBtn) {
+  allBtn.addEventListener("click", () => {
+    setActiveButton(allBtn);
+    loadAllProducts();
+  });
+}
+
+window.addEventListener("scroll", handleInfiniteScroll);
+
+if (productsContainer) {
+  productsContainer.querySelectorAll(".add-to-cart").forEach((button) => {
+    bindAddToCartButton(button);
+  });
+
+  productsContainer.querySelectorAll(".wishlist").forEach((button) => {
+    bindWishlistButton(button);
+  });
+}
+
+window.addEventListener("pageshow", () => {
+  updateCartBadge();
+});
+
+window.addEventListener("storage", (event) => {
+  if (event.key === "cart") {
+    updateCartBadge();
+  }
+});
+
+// Inicijalizim
+document.addEventListener("DOMContentLoaded", () => {
+  if (productsContainer && categoryContainer && allBtn) {
+    loadCategories();
+    loadAllProducts();
+  }
+
+  if (window.ProductDetailsModal && productsContainer) {
+    window.ProductDetailsModal.bindContainer(productsContainer);
+  }
+
+  updateCartBadge();
+  updateCurrentUserDisplay();
+});
+
+window.GreenLandSearchApi = {
+  applySearchFilter,
+  getProducts: () => sourceProducts,
+};

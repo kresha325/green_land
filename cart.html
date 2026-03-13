@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Shopping Cart | Green Land</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/cart.css" />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <!--google fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chelsea+Market&family=Handlee&family=Inspiration&family=Irish+Grover&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script src="./js/cart.js" defer></script>
+    <script src="./js/payment.js" defer></script>
+    <script src="./js/script.js" defer></script>
+  </head>
+  <body>
+    <section class="cart-container">
+      <div class="cart-left">
+        <div class="continue-bar">
+          <a
+            href="index.html"
+            aria-label="Kthehu te faqja kryesore"
+            title="Kthehu te faqja kryesore"
+            ><i class="fas fa-chevron-left"></i
+          ></a>
+          <span>Shopping Continue</span>
+        </div>
+        <hr />
+        <h3>Shopping cart</h3>
+        <p class="cart-subtitle" id="cart-subtitle">
+          You have 0 item in your cart
+        </p>
+
+        <div id="cart-items"></div>
+
+        <template id="cart-item-template">
+          <div class="cart-item">
+            <img src="images/parfum1.png" alt="product" data-role="image" />
+            <div class="cart-info">
+              <h4 data-role="title">Product title</h4>
+              <p data-role="meta">Unit price: $0.00</p>
+            </div>
+            <div class="cart-qty-vertical">
+              <span data-role="quantity">1</span>
+              <div>
+                <button
+                  type="button"
+                  class="qty-increase"
+                  data-role="increase"
+                  aria-label="Increase quantity"
+                >
+                  <i class="fas fa-chevron-up"></i>
+                </button>
+                <button
+                  type="button"
+                  class="qty-decrease"
+                  data-role="decrease"
+                  aria-label="Decrease quantity"
+                >
+                  <i class="fas fa-chevron-down"></i>
+                </button>
+              </div>
+            </div>
+            <div class="cart-price" data-role="line-total">$0.00</div>
+            <button
+              type="button"
+              class="delete-icon"
+              data-role="remove"
+              aria-label="Remove item"
+            >
+              <i class="far fa-trash-alt"></i>
+            </button>
+          </div>
+        </template>
+      </div>
+
+      <!-- ================= RIGHT: CARD DETAILS ================= -->
+
+      <div class="cart-right">
+        <h3>Card Details</h3>
+        <p class="card-type-label">Card type</p>
+
+        <div class="card-types">
+          <img src="images/Rectangle 9.png" alt="" />
+          <img src="images/Rectangle 10.png" alt="" />
+          <img src="images/Rectangle 11.png" alt="" />
+          <button class="see-all">See all</button>
+        </div>
+
+        <form id="payment-form" novalidate>
+          <label>Name on card</label>
+          <input type="text" placeholder="Name" required />
+
+          <label>Card Number</label>
+          <input
+            id="card-number"
+            type="text"
+            placeholder="1111 2222 3333 4444"
+            maxlength="19"
+            inputmode="numeric"
+            required
+          />
+
+          <div class="card-row">
+            <div>
+              <label>Expiration date</label>
+              <input
+                id="expiration-date"
+                type="text"
+                placeholder="mm/yy"
+                maxlength="5"
+                inputmode="numeric"
+                required
+              />
+            </div>
+
+            <div>
+              <label>CVV</label>
+              <input
+                id="cvv"
+                type="text"
+                placeholder="123"
+                maxlength="3"
+                inputmode="numeric"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="summary">
+            <div>
+              <span>Subtotal</span><span id="subtotal-value">$0.00</span>
+            </div>
+            <div>
+              <span>Shipping</span><span id="shipping-value">$4.00</span>
+            </div>
+            <div class="total-row">
+              <strong>Total (Tax incl.)</strong>
+              <strong id="total-value">$0.00</strong>
+            </div>
+          </div>
+
+          <button type="submit" class="checkout-btn">
+            <span id="checkout-total">$0.00</span>
+            <span>Checkout <i class="fas fa-arrow-right"></i></span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <div class="success-modal" id="success-modal">
+      <div class="modal-content">
+        <h3>Order has been paid successfully</h3>
+        <div class="checkmark">
+          <i class="fa-solid fa-check"></i>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

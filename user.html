@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="sq">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Favorites | Green Land</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/user.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <script src="js/product-modal.js" defer></script>
+    <script src="js/user.js" defer></script>
+  </head>
+  <body>
+    <header class="user-header">
+      <div class="user-header-top">
+        <a href="index.html" class="back-home"
+          ><i class="fas fa-arrow-left"></i> Home</a
+        >
+        <button
+          id="user-logout-btn"
+          class="user-logout-btn"
+          type="button"
+          hidden
+        >
+          Logout
+        </button>
+      </div>
+      <h1>Produktet e Pelqyera</h1>
+      <p id="user-subtitle">Favorites te user-it</p>
+    </header>
+
+    <main class="favorites-wrapper">
+      <section id="favorites-categories" class="favorites-categories" hidden>
+        <button id="favorites-all" class="active" type="button">All</button>
+        <div
+          id="favorites-category-buttons"
+          class="favorites-category-buttons"
+        ></div>
+      </section>
+      <section id="favorites-grid" class="favorites-grid"></section>
+      <p id="favorites-empty" class="favorites-empty" hidden>
+        Nuk ka produkte te pelqyera ende.
+      </p>
+    </main>
+  </body>
+</html>

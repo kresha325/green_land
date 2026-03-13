@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="sq">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notifications | Green Land</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/notification.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <script src="js/notification.js" defer></script>
+  </head>
+  <body>
+    <header class="notifications-header">
+      <a href="index.html" class="back-home"
+        ><i class="fas fa-arrow-left"></i> Home</a
+      >
+      <h1>Njoftimet</h1>
+      <p id="notifications-subtitle">Njoftimet e perdoruesit</p>
+    </header>
+
+    <main class="notifications-wrapper">
+      <section class="notifications-toolbar">
+        <span id="notifications-unread-count" class="notifications-unread-count"
+          >0 unread</span
+        >
+        <button id="notifications-mark-read" type="button">
+          Mark all as read
+        </button>
+      </section>
+
+      <section id="notifications-list" class="notifications-list"></section>
+      <p id="notifications-empty" class="notifications-empty" hidden>
+        Nuk ka njoftime per momentin.
+      </p>
+    </main>
+  </body>
+</html>

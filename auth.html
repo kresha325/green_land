@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="sq">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auth | Green Land</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/auth.css" />
+    <script src="js/auth.js" defer></script>
+  </head>
+  <body>
+    <main class="auth-page">
+      <a href="index.html" class="back-link"
+        ><i class="fa-solid fa-arrow-left"></i> Kthehu te Home</a
+      >
+
+      <section class="auth-card">
+        <h1>Green Land Account</h1>
+        <p class="subtitle">Regjistrohu ose hyj ne llogarine tende</p>
+
+        <div class="auth-tabs">
+          <button id="show-login" class="auth-tab active" type="button">
+            Login
+          </button>
+          <button id="show-register" class="auth-tab" type="button">
+            Register
+          </button>
+        </div>
+
+        <form id="login-form" class="auth-form">
+          <label for="login-email">Email</label>
+          <input
+            id="login-email"
+            type="email"
+            required
+            placeholder="example@mail.com"
+          />
+
+          <label for="login-password">Password</label>
+          <input
+            id="login-password"
+            type="password"
+            required
+            placeholder="********"
+          />
+
+          <button type="submit" class="auth-submit">Login</button>
+        </form>
+
+        <form id="register-form" class="auth-form" hidden>
+          <label for="register-name">Emri</label>
+          <input
+            id="register-name"
+            type="text"
+            required
+            placeholder="Emri i plote"
+          />
+
+          <label for="register-email">Email</label>
+          <input
+            id="register-email"
+            type="email"
+            required
+            placeholder="example@mail.com"
+          />
+
+          <label for="register-password">Password</label>
+          <input
+            id="register-password"
+            type="password"
+            required
+            placeholder="Min 6 karaktere"
+          />
+
+          <button type="submit" class="auth-submit">Register</button>
+        </form>
+
+        <div id="logged-view" class="logged-view" hidden>
+          <p id="welcome-text"></p>
+          <div class="logged-actions">
+            <a href="index.html" class="go-home">Vazhdo Shopping</a>
+            <button id="logout-btn" type="button" class="auth-logout">
+              Logout
+            </button>
+          </div>
+        </div>
+
+        <p id="auth-message" class="auth-message" hidden></p>
+      </section>
+    </main>
+  </body>
+</html>

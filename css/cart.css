@@ -1,0 +1,405 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f3f5f5;
+  color: #1f1f1f;
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* ================= LAYOUT ================= */
+.cart-container {
+  width: calc(100vw - 24px);
+  margin: 0 auto;
+  padding: 12px 10px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 500px;
+  gap: 16px;
+  align-items: start;
+}
+
+.cart-left {
+  padding: 0 8px;
+}
+
+.continue-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.continue-bar a {
+  color: #5d2ca2;
+  text-decoration: none;
+  font-size: 26px;
+}
+
+.continue-bar span {
+  font-size: 20px;
+  color: #222;
+  line-height: 1;
+}
+
+.cart-left hr {
+  border: none;
+  border-top: 2px solid #d6dcdd;
+  margin: 0 0 12px;
+}
+
+.cart-left h3 {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.cart-left p {
+  color: #646464;
+  margin: 4px 0 14px;
+  font-size: 15px;
+}
+
+#cart-items {
+  display: grid;
+  gap: 18px;
+}
+
+.cart-item {
+  background: #fff;
+  border: 1px solid #e4e4e4;
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: 94px minmax(0, 1fr) 82px 100px 26px;
+  align-items: center;
+  gap: 16px;
+}
+
+.cart-item img {
+  width: 94px;
+  height: 94px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.cart-info h4 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.cart-info p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #666;
+}
+
+/* ================= QUANTITY ================= */
+.cart-qty-vertical {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.cart-qty-vertical span {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.cart-qty-vertical i {
+  display: block;
+  background: transparent;
+  border: none;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.qty-increase,
+.qty-decrease {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  display: block;
+}
+
+.delete-icon {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #8f8f8f;
+  transition: color 0.2s ease;
+  font-size: 18px;
+}
+
+.delete-icon:hover {
+  color: #c73030;
+}
+
+.cart-price {
+  font-weight: 600;
+  color: #2b2b2b;
+  font-size: 20px;
+  min-width: 80px;
+  text-align: right;
+}
+
+/* ================= RIGHT SIDE ================= */
+.cart-right {
+  width: 100%;
+  background: #4fa58d;
+  padding: 22px;
+  border-radius: 10px;
+  color: #fff;
+  position: sticky;
+  top: 12px;
+  align-self: start;
+}
+
+.cart-right h3 {
+  margin: 0 0 8px;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.card-type-label {
+  margin: 0 0 14px;
+  font-size: 16px;
+}
+
+.card-types {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.card-types img,
+.see-all {
+  width: 100%;
+  height: 62px;
+  object-fit: cover;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.see-all {
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ================= PAYMENT ================= */
+.cart-right form label {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.cart-right input {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 14px;
+}
+
+.cart-right input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.cart-right input.input-invalid {
+  border: 1px solid #ff3c3c;
+}
+
+.input-error-text {
+  display: block;
+  min-height: 14px;
+  margin-top: -8px;
+  margin-bottom: 8px;
+  font-size: 10px;
+  color: #ff3c3c;
+}
+
+.card-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.summary {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 16px;
+}
+
+.summary div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.total-row strong {
+  font-weight: 700;
+}
+
+.checkout-btn {
+  margin-top: 14px;
+  width: 100%;
+  border: none;
+  padding: 12px 16px;
+  background: #065b4a;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.checkout-btn i {
+  margin-left: 10px;
+}
+
+@media (max-width: 1100px) {
+  .cart-container {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-right {
+    position: static;
+    top: auto;
+    max-width: 620px;
+  }
+}
+
+@media (max-width: 760px) {
+  .continue-bar span {
+    font-size: 28px;
+  }
+
+  .cart-left h3 {
+    font-size: 28px;
+  }
+
+  .cart-left p {
+    font-size: 16px;
+  }
+
+  .cart-item {
+    grid-template-columns: 78px 1fr;
+    gap: 12px;
+  }
+
+  .cart-item img {
+    width: 78px;
+    height: 78px;
+  }
+
+  .cart-info h4 {
+    font-size: 18px;
+  }
+
+  .cart-info p {
+    font-size: 12px;
+  }
+
+  .cart-qty-vertical,
+  .cart-price,
+  .delete-icon {
+    justify-self: start;
+  }
+
+  .card-types {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cart-right h3 {
+    font-size: 32px;
+  }
+
+  .cart-right form label,
+  .summary,
+  .checkout-btn {
+    font-size: 16px;
+  }
+}
+
+/* Success Modal */ 
+
+.success-modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  background-color: rgba(66, 108, 102, 0.45);
+  -webkit-backdrop-filter: blur(1px);
+  backdrop-filter: blur(1px);
+  justify-content: center;
+  align-items: center;
+}
+
+.success-modal .modal-content {
+    background-color: #fff;
+  border-radius: 10px;
+  width: 480px;
+  max-width: calc(100vw - 40px);
+  padding: 28px 24px;
+  min-height: 160px;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.success-modal .modal-content h3 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  font-weight: 500;
+  color: #202020;
+  white-space: nowrap;
+}
+
+.checkmark{
+  background-color:#4fa58d;
+    color: #fff;
+  font-size: 30px;
+  width: 54px;
+  height: 54px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  animation: popIn 0.25s ease;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="sq">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Green Land</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chelsea+Market&family=Handlee&family=Inspiration&family=Irish+Grover&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font AWESOME CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <!-- JAVASCRIPT -->
+    <script src="./js/hero.js" defer></script>
+    <script src="./js/product-modal.js" defer></script>
+    <script src="./js/notification.js" defer></script>
+    <script src="./js/script.js" defer></script>
+    <script src="./js/search.js" defer></script>
+  </head>
+  <body>
+    <!-- ================= HEADER / HERO ================= -->
+    <header class="hero">
+      <div class="navbar">
+        <div class="logo">
+          <img src="images/logo.png" alt="Green Land logo" />
+          <span>Green Land</span>
+        </div>
+        <div class="icons">
+          <form class="navbar-search" id="product-search-form" role="search">
+            <input
+              type="search"
+              id="product-search"
+              placeholder="Kerko produkt..."
+              aria-label="Kerko produkt sipas emrit"
+            />
+            <button type="submit" class="search-submit" aria-label="Kerko">
+              <i class="fas fa-search"></i>
+            </button>
+            <div
+              id="search-suggestions"
+              class="search-suggestions"
+              hidden
+            ></div>
+          </form>
+          <span id="nav-username" class="nav-username" hidden></span>
+          <a
+            id="auth-trigger"
+            class="auth-trigger"
+            href="user.html"
+            aria-label="Hap login ose register"
+          >
+            <i class="fas fa-user"></i>
+          </a>
+          <div class="notify-wrap">
+            <a
+              href="notification.html"
+              id="notifications-trigger"
+              class="notify-icon"
+              aria-label="Hap njoftimet"
+            >
+              <i class="fas fa-bell"></i>
+              <span id="notifications-badge" class="notifications-badge" hidden
+                >0</span
+              >
+            </a>
+            <section
+              id="notifications-snackbar"
+              class="notifications-snackbar"
+              hidden
+            >
+              <div class="notifications-snackbar-head">
+                <strong>Njoftimet</strong>
+                <a href="notification.html" id="notifications-see-all"
+                  >Shiko te gjitha</a
+                >
+              </div>
+              <div
+                id="notifications-snackbar-list"
+                class="notifications-snackbar-list"
+              ></div>
+              <p
+                id="notifications-snackbar-empty"
+                class="notifications-snackbar-empty"
+                hidden
+              >
+                Nuk ka njoftime.
+              </p>
+            </section>
+          </div>
+          <a href="cart.html" class="cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="notification-badge">0</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-content">
+        <h1>
+          <img src="images/logo.png" class="big-logo" alt="Green Land" /> Green
+          Land
+        </h1>
+        <h2>Planeti i produkteve</h2>
+        <p>Nga toka jonë në shtëpinë tuaj</p>
+      </div>
+    </header>
+
+    <!-- ================= KATEGORITË ================= -->
+    <section class="categories">
+      <div class="all-products-button">
+        <button id="all-products" class="active">All</button>
+      </div>
+      <div id="categories" class="category-buttons">
+        <button class="category-button">Fruits</button>
+        <button class="category-button">Vegetables</button>
+        <button class="category-button">Dairy</button>
+        <button class="category-button">Bakery</button>
+        <button class="category-button">Beverages</button>
+      </div>
+    </section>
+
+    <h3>Grab the best deal on <span>our products</span></h3>
+
+    <!-- ================= PRODUKTET ================= -->
+
+    <section class="products">
+      <!-- Produkt 1 -->
+      <div class="product-card">
+        <img src="images/parfum1.png" alt="Product" />
+        <h4>Product Title</h4>
+        <p class="desc">Product description</p>
+        <div class="price-cart">
+          <span class="price">$25</span>
+          <button class="add-to-cart">Add to cart</button>
+          <div class="wishlist"><i class="fas fa-heart"></i></div>
+        </div>
+      </div>
+
+      <!-- Produkt 2 -->
+      <div class="product-card">
+        <img src="images/parfum1.png" alt="Product" />
+        <h4>Nombre Producto</h4>
+        <p class="desc">Descripcion Producto</p>
+        <div class="price-cart">
+          <span class="price">$25</span>
+          <button class="add-to-cart">Add to cart</button>
+          <div class="wishlist"><i class="fas fa-heart"></i></div>
+        </div>
+      </div>
+
+      <!-- Produkt 3 -->
+      <div class="product-card">
+        <img src="images/parfum1.png" alt="Product" />
+        <h4>Nombre Producto</h4>
+        <p class="desc">Descripcion Producto</p>
+        <div class="price-cart">
+          <span class="price">$25</span>
+          <button class="add-to-cart">Add to cart</button>
+          <div class="wishlist"><i class="fas fa-heart"></i></div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <img src="images/parfum1.png" alt="Product" />
+        <h4>Product Title</h4>
+        <p class="desc">Product description</p>
+        <div class="price-cart">
+          <span class="price">$25</span>
+          <button class="add-to-cart">Add to cart</button>
+          <div class="wishlist"><i class="fas fa-heart"></i></div>
+        </div>
+      </div>
+
+      <!-- Produkt 2 -->
+      <div class="product-card">
+        <img src="images/parfum1.png" alt="Product" />
+        <h4>Nombre Producto</h4>
+        <p class="desc">Descripcion Producto</p>
+        <div class="price-cart">
+          <span class="price">$25</span>
+          <button class="add-to-cart">Add to cart</button>
+          <div class="wishlist"><i class="fas fa-heart"></i></div>
+        </div>
+      </div>
+
+      <!-- Produkt 3 -->
+      <div class="product-card">
+        <img src="images/parfum1.png" alt="Product" />
+        <h4>Nombre Producto</h4>
+        <p class="desc">Descripcion Producto</p>
+        <div class="price-cart">
+          <span class="price">$25</span>
+          <button class="add-to-cart">Add to cart</button>
+          <div class="wishlist"><i class="fas fa-heart"></i></div>
+        </div>
+      </div>
+
+      <!-- Produkt 4 -->
+      <div class="product-card">
+        <img src="images/parfum1.png" alt="Product" />
+        <h4>Nombre Producto</h4>
+        <p class="desc">Descripcion Producto</p>
+        <div class="price-cart">
+          <span class="price">$25</span>
+          <button class="add-to-cart">Add to cart</button>
+          <div class="wishlist"><i class="fas fa-heart"></i></div>
+        </div>
+      </div>
+
+      <!-- Produkt 5 -->
+      <div class="product-card">
+        <img src="images/parfum1.png" alt="Product" />
+        <h4>Nombre Producto</h4>
+        <p class="desc">Descripcion Producto</p>
+        <div class="price-cart">
+          <span class="price">$25</span>
+          <button class="add-to-cart">Add to cart</button>
+          <div class="wishlist"><i class="fas fa-heart"></i></div>
+        </div>
+      </div>
+
+      <!-- Produkt 6 -->
+      <div class="product-card">
+        <img src="images/parfum1.png" alt="Product" />
+        <h4>Nombre Producto</h4>
+        <p class="desc">Descripcion Producto</p>
+        <div class="price-cart">
+          <span class="price">$25</span>
+          <button class="add-to-cart">Add to cart</button>
+          <div class="wishlist"><i class="fas fa-heart"></i></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+      <p>© 2025 Green Land. Të gjitha të drejtat e rezervuara.</p>
+      <div class="social">
+        <i class="fab fa-facebook"></i>
+        <i class="fab fa-instagram"></i>
+        <i class="fab fa-twitter"></i>
+      </div>
+      <div>
+        <a href="">Terms of Service </a>
+        <a href=""> Privacy and Pocily</a>
+      </div>
+    </footer>
+  </body>
+</html>

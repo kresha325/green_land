@@ -1,0 +1,154 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(120deg, #0a3d30 0%, #0f5f49 50%, #6cc4a5 100%);
+  color: #17211d;
+}
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  gap: 18px;
+}
+
+.back-link {
+  color: #e8fff5;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  padding: 26px;
+}
+
+.auth-card h1 {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #5f726d;
+  margin-bottom: 16px;
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.auth-tab {
+  border: 1px solid #cfe5dd;
+  background: #f2fbf7;
+  color: #1c4f40;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.auth-tab.active {
+  background: #2c9f77;
+  border-color: #2c9f77;
+  color: #fff;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.auth-form label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.auth-form input {
+  width: 100%;
+  border: 1px solid #c9dfd7;
+  border-radius: 10px;
+  padding: 11px 12px;
+  outline: none;
+}
+
+.auth-submit,
+.auth-logout,
+.go-home {
+  margin-top: 10px;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.auth-submit {
+  background: #2c9f77;
+  color: #fff;
+}
+
+.logged-view {
+  border: 1px solid #c9dfd7;
+  border-radius: 12px;
+  background: #f5fcf9;
+  padding: 14px;
+}
+
+#welcome-text {
+  font-weight: 700;
+  color: #19483b;
+  margin-bottom: 10px;
+}
+
+.logged-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.go-home {
+  background: #0f5f49;
+  color: #fff;
+  flex: 1;
+}
+
+.auth-logout {
+  background: #e8f5f0;
+  color: #1f5f4c;
+}
+
+.auth-message {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.auth-message.success {
+  background: #e8f9f1;
+  color: #1f6a4f;
+}
+
+.auth-message.error {
+  background: #ffecec;
+  color: #9e2f2f;
+}
