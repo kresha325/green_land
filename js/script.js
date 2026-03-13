@@ -514,6 +514,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Go to Top Button logic
     const goToTopBtn = document.getElementById("go-to-top");
     window.addEventListener("scroll", () => {
+      if (!goToTopBtn) return;
       if (window.scrollY > 200) {
         goToTopBtn.style.display = "block";
       } else {
