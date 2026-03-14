@@ -4,6 +4,9 @@ const allBtn = document.getElementById("all-products");
 const navUsername = document.getElementById("nav-username");
 const authTrigger = document.getElementById("auth-trigger");
 const PAGE_SIZE = 9;
+const API_LIMIT = 100;
+let currentSkip = 0;
+let allProductsLoaded = false;
 
 let sourceProducts = [];
 let visibleProducts = [];
@@ -199,20 +202,35 @@ function syncCartFromStorage() {
 }
 
 // Ngarko të gjitha produktet
-async function loadAllProducts() {
+async function loadAllProducts(reset = false) {
   if (!productsContainer) return;
-  if (isFetchingProducts) return;
+  if (isFetchingProducts || allProductsLoaded) return;
 
   try {
     isFetchingProducts = true;
-    const response = await fetch("https://dummyjson.com/products?limit=100");
+    if (reset) {
+      currentSkip = 0;
+      allProductsLoaded = false;
+      sourceProducts = [];
+      productsContainer.innerHTML = "";
+    }
+    const response = await fetch(`https://dummyjson.com/products?limit=${API_LIMIT}&skip=${currentSkip}`);
 
     if (!response.ok) {
       throw new Error("Nuk u moren produktet");
     }
 
     const data = await response.json();
-    initializeProductList(data.products || []);
+    if (Array.isArray(data.products) && data.products.length > 0) {
+      sourceProducts = sourceProducts.concat(data.products);
+      currentSkip += data.products.length;
+      if (data.products.length < API_LIMIT) {
+        allProductsLoaded = true;
+      }
+      initializeProductList(sourceProducts, reset);
+    } else {
+      allProductsLoaded = true;
+    }
   } catch (error) {
     console.error("Error loading all products:", error);
     productsContainer.innerHTML = "<p>Nuk u ngarkuan produktet.</p>";
@@ -295,9 +313,13 @@ async function loadProductsByCategory(category) {
 }
 
 // Inicjalizo listën aktive të produkteve dhe shfaq batch-in e parë
-function initializeProductList(products) {
+function initializeProductList(products, reset = false) {
   sourceProducts = Array.isArray(products) ? products : [];
-  applySearchFilter(activeSearchQuery);
+  if (reset) {
+    applySearchFilter("");
+  } else {
+    applySearchFilter(activeSearchQuery);
+  }
 }
 
 function applySearchFilter(query = "") {
@@ -367,7 +389,12 @@ function handleInfiniteScroll() {
     window.innerHeight + window.scrollY >= document.body.offsetHeight - 120;
 
   if (reachedBottom) {
-    renderNextBatch();
+    // Nëse jemi në All dhe ka më shumë produkte për t'u ngarkuar
+    if (allBtn && allBtn.classList.contains("active") && !allProductsLoaded) {
+      loadAllProducts(false);
+    } else {
+      renderNextBatch();
+    }
   }
 }
 
@@ -483,7 +510,8 @@ function setActiveButton(button) {
 if (allBtn) {
   allBtn.addEventListener("click", () => {
     setActiveButton(allBtn);
-    loadAllProducts();
+    activeSearchQuery = "";
+    loadAllProducts(true);
   });
 }
 
